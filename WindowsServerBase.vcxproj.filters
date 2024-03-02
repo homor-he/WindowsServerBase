@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Thread">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="TimerRelation">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{4932f56f-b5de-46d6-b63f-ae46e4005677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SocketRelation">
+      <UniqueIdentifier>{72311424-eda9-41d1-8002-bd72b4a6b13e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Protocol">
+      <UniqueIdentifier>{6fe25e8a-537a-4f76-9d30-ab622ccd3be0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Protocol\ProtoBuf_Proto">
+      <UniqueIdentifier>{1dc0916d-cab2-49da-9d30-7c87e042d9bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Protocol\ProtoBuf_Cpp">
+      <UniqueIdentifier>{f845789d-d040-4849-b49e-ae6bff852707}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Log.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadTask.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadMutex.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadPool.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="CycleLinkList.h">
+      <Filter>TimerRelation</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerDefine.h">
+      <Filter>TimerRelation</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerWheel.h">
+      <Filter>TimerRelation</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerMgr.h">
+      <Filter>TimerRelation</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonFunc.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpSocketBase.h">
+      <Filter>SocketRelation</Filter>
+    </ClInclude>
+    <ClInclude Include="Base.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Test_Timer.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpThreadServer.h">
+      <Filter>SocketRelation</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketDefine.h">
+      <Filter>SocketRelation</Filter>
+    </ClInclude>
+    <ClInclude Include="Test_ClientServer.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketHandler.h">
+      <Filter>SocketRelation</Filter>
+    </ClInclude>
+    <ClInclude Include="Test_ThreadPool.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkNetObj.h">
+      <Filter>SocketRelation</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtoGobalDefine.h">
+      <Filter>Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerGlobalDefine.h">
+      <Filter>Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpClient.h">
+      <Filter>SocketRelation</Filter>
+    </ClInclude>
+    <ClInclude Include="ConnectionPool.h">
+      <Filter>SocketRelation</Filter>
+    </ClInclude>
+    <ClInclude Include="Test_ConnectionPool.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoCommon.pb.h">
+      <Filter>Protocol\ProtoBuf_Cpp</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Log.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadTask.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadPool.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerWheel.cpp">
+      <Filter>TimerRelation</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerMgr.cpp">
+      <Filter>TimerRelation</Filter>
+    </ClCompile>
+    <ClCompile Include="CommonFunc.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpSocketBase.cpp">
+      <Filter>SocketRelation</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpThreadServer.cpp">
+      <Filter>SocketRelation</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketHandler.cpp">
+      <Filter>SocketRelation</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkNetObj.cpp">
+      <Filter>SocketRelation</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpClient.cpp">
+      <Filter>SocketRelation</Filter>
+    </ClCompile>
+    <ClCompile Include="ConnectionPool.cpp">
+      <Filter>SocketRelation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoCommon.pb.cc">
+      <Filter>Protocol\ProtoBuf_Cpp</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
+    <None Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoCommon.proto">
+      <Filter>Protocol\ProtoBuf_Proto</Filter>
+    </None>
+  </ItemGroup>
+</Project>
