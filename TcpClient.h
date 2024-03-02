@@ -34,6 +34,7 @@ private:
 	PER_SOCKET_CONTEXT* m_cltContext;
 };
 
+
 class TcpClient
 {
 	friend class TcpClientIocpTask;
