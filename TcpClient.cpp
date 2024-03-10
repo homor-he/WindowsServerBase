@@ -65,7 +65,8 @@ void TcpClientIocpTask::RemoveSocketContext()
 
 void TcpClientIocpTask::Reconnect()
 {
-	m_pTcpClient->Reconnect();
+	if( m_pTcpClient && m_pTcpClient->GetCloseStat() == false)
+		m_pTcpClient->Reconnect();
 }
 
 bool TcpClientIocpTask::PostSend(PER_IO_CONTEXT* pIOContext, PER_SOCKET_CONTEXT* pSocketContext)
@@ -147,13 +148,13 @@ void TcpClientIocpTask::RePostRecv(PER_IO_CONTEXT* pIOContext, PER_SOCKET_CONTEX
 
 void TcpClientIocpTask::Execute(void* para)
 {
-	m_quit = false;
+	//m_quit.store(false);
 
 	DWORD dwByteTransferred = 0;
 	OVERLAPPED* pOverlapped = nullptr;
 	PER_SOCKET_CONTEXT* pSocketContext = nullptr;
 	DWORD dwFlag;
-	while (!m_quit)
+	while (!m_quit.load())
 	{
 		if (m_hIPCompletionPort == nullptr)
 			continue;
@@ -261,20 +262,15 @@ TcpClient::TcpClient(const string& szIP, short wPort):
 	m_iocpThread("", 1, nullptr,false),
 	m_pIocpThreadTask(nullptr),
 	m_reconnectTimes(MAX_RECONNECT_TIMES),
-	m_bReconnectStarted(false)
+	m_bReconnectStarted(false),
+	m_closed(false)
 {
 }
 
 TcpClient::~TcpClient()
 {
-	CloseSocket();
-	CloseIocpThread();
-
-	delete m_cltContext;
-	m_cltContext = nullptr;
-
-	delete m_pIocpThreadTask;
-	m_pIocpThreadTask = nullptr;
+	if(!m_closed)
+		CloseAll();
 }
 
 bool TcpClient::Connect()
@@ -329,11 +325,43 @@ void TcpClient::CloseSocket()
 	m_clientSock.Close();
 }
 
+void TcpClient::SetCloseStat()
+{
+	m_closed = true;
+}
+
+void TcpClient::CloseAll()
+{
+	if (m_closed)
+		return;
+	SetCloseStat();
+
+	CloseIocpThread();
+	CloseSocket();
+
+	if (m_cltContext)
+	{
+		delete m_cltContext;
+		m_cltContext = nullptr;
+	}
+	
+	if (m_pIocpThreadTask)
+	{
+		delete m_pIocpThreadTask;
+		m_pIocpThreadTask = nullptr;
+	}
+}
+
+bool TcpClient::GetCloseStat()
+{
+	return m_closed;
+}
+
 bool TcpClient::Reconnect()
 {
-	if (m_bReconnectStarted)
+	if (m_bReconnectStarted.load())
 		return false;
-	m_bReconnectStarted = true;
+	m_bReconnectStarted.store(true);
 
 	CloseSocket();
 	m_clientSock.Socket(isOverLapped::OverLapped_True);
@@ -350,7 +378,7 @@ bool TcpClient::Reconnect()
 
 			WriteLog("reconnect to ip:%s port:%d success", m_szIP.c_str(), m_wPort);
 			m_reconnectTimes = MAX_RECONNECT_TIMES;
-			m_bReconnectStarted = false;
+			m_bReconnectStarted.store(false);
 			return SetRecvIO();
 		}
 		else
@@ -362,7 +390,7 @@ bool TcpClient::Reconnect()
 	WriteLog("reconnect to ip:%s port:%d fail", m_szIP.c_str(), m_wPort);
 	CloseSocket();
 	CloseIocpThread();
-	m_bReconnectStarted = false;
+	m_bReconnectStarted.store(false);
 	return false;
 }
 

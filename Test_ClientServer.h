@@ -49,7 +49,7 @@ void ClientProcess()
 			//初次连接时发送建立连接包
 			{
 				rp::CmnBuf_MsgHead* pHead = new rp::CmnBuf_MsgHead;
-				pHead->set_msgtype(PROTO_REQ_BUILD_CONN);
+				pHead->set_msgtype(PROTO_BUILD_CONN_REQ);
 				pHead->set_origin(SVR_LINK_TYPE_UNKNOWN);
 				
 				rp::CmnBuf cmnBuf;
@@ -179,7 +179,7 @@ void ClientIocpProcess()
 
 	////初次建立连接发送的包
 	//rp::CmnBuf_MsgHead* pHead = new rp::CmnBuf_MsgHead;
-	//pHead->set_msgtype(PROTO_REQ_BUILD_CONN);
+	//pHead->set_msgtype(PROTO_BUILD_CONN_REQ);
 	//pHead->set_origin(SVR_LINK_TYPE_UNKNOWN);
 
 	//rp::CmnBuf cmnBuf;

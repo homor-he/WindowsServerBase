@@ -31,7 +31,7 @@ Thread::~Thread()
 
 void Thread::Run()
 {
-	while (!m_quit)
+	while (!m_quit.load())
 	{
 		if (m_task == nullptr || m_task->GetQuitStat())
 		{
@@ -69,12 +69,12 @@ void Thread::Signal()
 
 void Thread::SetStartStat(bool val)
 {
-	m_started = val;
+	m_started.store(val);
 }
 
 bool Thread::GetStartedStatus()
 {
-	return m_started;
+	return m_started.load();
 }
 
 DWORD Thread::GetThreadID()
@@ -86,10 +86,10 @@ void Thread::Quit()
 {
 	if (m_task != NULL)
 	{
-		m_quit = true;
+		m_quit.store(true);
 		m_task->SetQuit();
-		Signal();
 		this->Join(2000);    //主线程等待子线程执行完
+		Signal();
 		if (m_defaultTask)
 		{
 			delete m_task;

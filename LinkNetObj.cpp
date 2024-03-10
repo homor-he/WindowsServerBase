@@ -61,7 +61,7 @@ bool LinkNetObj::SendMsgAsync(string& sendMsg)
 void LinkNetObj::SendBuildConnectAck()
 {
 	rp::CmnBuf_MsgHead* pHead = new rp::CmnBuf_MsgHead;
-	pHead->set_msgtype(PROTO_REQ_BUILD_CONN_ACK);
+	pHead->set_msgtype(PROTO_BUILD_CONN_ACK);
 
 	rp::CmnBuf cmnBuf;
 	cmnBuf.set_allocated_msgheader(pHead);
@@ -123,8 +123,6 @@ void LinkNetObj::ParseTestReq(rp::CmnBuf& buf)
 
 void LinkNetObj::ParseHeartBeat(rp::CmnBuf& buf)
 {
-
-
 	string sReq = buf.SerializeAsString();
 	SendMsgAsync(sReq);
 }

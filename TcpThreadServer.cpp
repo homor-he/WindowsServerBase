@@ -233,7 +233,7 @@ void TcpThreadServer::OnAsyncMsg(PER_SOCKET_CONTEXT* socket, share_buff buff)
 	cmnBuf.ParseFromArray(buff->data(), (int)buff->size());
 	const rp::CmnBuf_MsgHead header = cmnBuf.msgheader();
 
-	if (header.msgtype() == PROTO_REQ_BUILD_CONN)
+	if (header.msgtype() == PROTO_BUILD_CONN_REQ)
 	{
 		UINT linkType = header.origin();
 		shared_ptr<LinkNetObj> pLinkNetObj = AddLinkNetObj(socket, linkType);

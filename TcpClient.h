@@ -47,6 +47,11 @@ public:
 	virtual bool Reconnect();
 	void CloseIocpThread();
 	void CloseSocket();
+
+	void CloseAll();
+	void SetCloseStat();
+
+	bool GetCloseStat();
 	
 	void SendMsgAsync(string & sendMsg);
 	virtual void OnMsg(char* buf, int len);
@@ -55,6 +60,7 @@ private:
 private:
 	TcpSocketBase m_clientSock;
 	PER_SOCKET_CONTEXT* m_cltContext;
+	bool m_closed;
 
 	HANDLE m_IOCompletionPort;
 	string m_szIP;

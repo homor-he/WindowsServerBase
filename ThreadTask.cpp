@@ -7,7 +7,7 @@ ThreadTask::ThreadTask() :
 
 void ThreadTask::Execute(void* para)
 {
-	m_quit = false;
+	m_quit.store(false);
 	function<void()> callBack;
 	queue<function<void()>> tmpQueue;
 	{
@@ -22,7 +22,7 @@ void ThreadTask::Execute(void* para)
 		callBack();
 	}
 
-	m_quit = true;
+	m_quit.store(true);
 }
 
 bool ThreadTask::AddTask(function<void()> callback)
@@ -34,15 +34,15 @@ bool ThreadTask::AddTask(function<void()> callback)
 
 bool ThreadTask::GetQuitStat()
 {
-	return m_quit ? true : false;
+	return m_quit.load();
 }
 
 void ThreadTask::SetQuit()
 {
-	m_quit = true;
+	m_quit.store(true);
 }
 
 void ThreadTask::SetNotQuit()
 {
-	m_quit = false;
+	m_quit.store(false);
 }

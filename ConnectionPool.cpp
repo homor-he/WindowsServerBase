@@ -14,6 +14,10 @@ SingleConnection::SingleConnection(const string& szIP, short wPort, string name,
 
 SingleConnection::~SingleConnection()
 {
+}
+
+void SingleConnection::CloseConnection()
+{
 	{
 		AutoLock lock(m_mutexSyncEvent);
 		for (auto itor = m_mapSyncEvent.begin(); itor != m_mapSyncEvent.end(); ++itor)
@@ -22,6 +26,7 @@ SingleConnection::~SingleConnection()
 			m_mapSyncEvent.erase(itor);
 		}
 	}
+	TcpClient::CloseAll();
 }
 
 bool SingleConnection::Connect()
@@ -67,7 +72,7 @@ UINT SingleConnection::SendMsgSync(Message* msg, rp::CmnBuf::MsgHead* header, sh
 {
 	if (!header)
 		return SEND_MSG_FAIL;
-	if (header->msgtype() == PROTO_REQ_BUILD_CONN)
+	if (header->msgtype() == PROTO_BUILD_CONN_REQ)
 	{
 		string sendMsg = msg->SerializeAsString();
 		SendMsgAsync(sendMsg);
@@ -127,7 +132,7 @@ void SingleConnection::OnConnectBuilded()
 #ifdef PROTOBUF
 	//初次建立连接发送的包
 	rp::CmnBuf_MsgHead* pHead = new rp::CmnBuf_MsgHead;
-	pHead->set_msgtype(PROTO_REQ_BUILD_CONN);
+	pHead->set_msgtype(PROTO_BUILD_CONN_REQ);
 	pHead->set_origin(m_svrLinkType);
 
 	rp::CmnBuf cmnBuf;
@@ -148,7 +153,7 @@ void SingleConnection::OnRecvMsgAsync(share_buff buff)
 	const rp::CmnBuf_MsgHead& sHead = sCmnBuf.msgheader();
 
 	//收到建立连接回包后，调用建立完成的回调
-	if (sHead.msgtype() == PROTO_REQ_BUILD_CONN_ACK)
+	if (sHead.msgtype() == PROTO_BUILD_CONN_ACK)
 	{
 		if (m_msgHandler)
 			m_msgHandler->OnConnectedCallBack(*this);
@@ -165,7 +170,7 @@ void SingleConnection::OnRecvMsgSync(share_buff buff)
 	sCmnBuf.ParseFromArray(buff->data(), buff->size());
 	const rp::CmnBuf_MsgHead& sHead = sCmnBuf.msgheader();
 	//收到建立连接回包后，调用建立完成的回调
-	if (sHead.msgtype() == PROTO_REQ_BUILD_CONN_ACK)
+	if (sHead.msgtype() == PROTO_BUILD_CONN_ACK)
 	{
 		if (m_msgHandler)
 			m_msgHandler->OnConnectedCallBack(*this);
@@ -215,17 +220,7 @@ ConnectionPool::ConnectionPool(void) : m_szIP(""),m_wPort(0), m_connectedAll(tru
 
 ConnectionPool::~ConnectionPool(void)
 {
-	for (SingleConnection* pObj : m_connSyncList)
-	{
-		delete pObj;
-		pObj = nullptr;
-	}
-
-	for (SingleConnection* pObj : m_connAsyncList)
-	{
-		delete pObj;
-		pObj = nullptr;
-	}
+	CloseAll();
 }
 
 bool ConnectionPool::Init(const string& szIP, short wPort, uint svrLinktype, uint syncConnCnt, uint asyncConnCnt, shared_ptr<ConnectionMsgHandler> msgHandler)
@@ -248,6 +243,25 @@ bool ConnectionPool::Init(const string& szIP, short wPort, uint svrLinktype, uin
 			m_connectedAll = false;
 	}
 	return m_connectedAll;
+}
+
+void ConnectionPool::CloseAll()
+{
+	for (SingleConnection* pObj : m_connSyncList)
+	{
+		pObj->CloseConnection();
+		delete pObj;
+		pObj = nullptr;
+	}
+	m_connSyncList.clear();
+
+	for (SingleConnection* pObj : m_connAsyncList)
+	{
+		pObj->CloseConnection();
+		delete pObj;
+		pObj = nullptr;
+	}
+	m_connAsyncList.clear();
 }
 
 uint ConnectionPool::SendMsgAsync(const void* data, int len)

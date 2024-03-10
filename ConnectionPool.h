@@ -56,6 +56,7 @@ public:
 	SingleConnection(const string& szIP, short wPort, string name, UINT svrLinkType,ConnectionType cntType = CntType_Async,
 		shared_ptr<ConnectionMsgHandler> msgHandler = nullptr);
 	virtual ~SingleConnection();
+	void CloseConnection();
 
 	virtual bool Connect();
 	virtual bool Reconnect();
@@ -95,11 +96,14 @@ public:
 
 	bool Init(const string& szIP, short wPort, uint svrLinktype = SVR_LINK_TYPE_UNKNOWN, uint syncConnCnt = DEFALUT_CONN_CNT,
 		uint asyncConnCnt = DEFALUT_CONN_CNT, shared_ptr<ConnectionMsgHandler> msgHandler = nullptr);
+	void CloseAll();
 
 	//当前仅当初始化时有异步连接时使用
 	uint SendMsgAsync(const void* data, int len);
 	//当前仅当初始化时有同步连接使用
 	uint SendMsgSync(const void* data, int len, vector<char>* recv = nullptr);
+
+
 
 #ifdef PROTOBUF
 	//与上面同理

@@ -63,7 +63,7 @@ public:
 	bool RemoveLinkNetObj(SOCKET sock);
 private:
 	bool Init();
-private:
+protected:
 	TcpSocketBase m_listenSock;
 	shared_ptr<PER_SOCKET_CONTEXT> m_listenContext;
 	int m_listenFD;
