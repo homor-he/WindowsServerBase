@@ -99,12 +99,8 @@ public:
 	void CloseAll();
 
 	//当前仅当初始化时有异步连接时使用
-	uint SendMsgAsync(const void* data, int len);
-	//当前仅当初始化时有同步连接使用
-	uint SendMsgSync(const void* data, int len, vector<char>* recv = nullptr);
-
-
-
+	void SendMsgAsync(char* data, int len);
+	
 #ifdef PROTOBUF
 	//与上面同理
 	uint SendMsgAsync(Message* data);

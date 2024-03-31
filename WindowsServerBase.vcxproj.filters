@@ -108,6 +108,9 @@
     <ClInclude Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoCommon.pb.h">
       <Filter>Protocol\ProtoBuf_Cpp</Filter>
     </ClInclude>
+    <ClInclude Include="PacketProcess.h">
+      <Filter>Protocol</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Log.cpp">
@@ -158,10 +161,16 @@
     <ClCompile Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoCommon.pb.cc">
       <Filter>Protocol\ProtoBuf_Cpp</Filter>
     </ClCompile>
+    <ClCompile Include="PacketProcess.cpp">
+      <Filter>Protocol</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
     <None Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoCommon.proto">
+      <Filter>Protocol\ProtoBuf_Proto</Filter>
+    </None>
+    <None Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoAuth.proto">
       <Filter>Protocol\ProtoBuf_Proto</Filter>
     </None>
   </ItemGroup>

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ConnectionPool.h"
+#include "PacketProcess.h"
 
 class RecvMsgHandler : public ConnectionMsgHandler
 {
@@ -98,21 +99,23 @@ void TestSingConnectionAsync()
 			pUser->set_testpwd(to_string(i << i));
 			pUser->set_testtype(rp::ContentTest::TestType::ContentTest_TestType_PC);
 		}
-		string contentStr = sContext.SerializeAsString();
+		//string contentStr = sContext.SerializeAsString();
 		//测试协议
-		rp::CmnBuf_MsgHead* pHead = new rp::CmnBuf_MsgHead;
-		pHead->set_msgtype(PROTO_TEST_REQ);
+		//rp::CmnBuf_MsgHead* pHead = new rp::CmnBuf_MsgHead;
+		//pHead->set_msgtype(PROTO_TEST_REQ);
 
-		rp::CmnBuf cmnBuf;
-		cmnBuf.set_allocated_msgheader(pHead);
-		cmnBuf.set_content(contentStr);
+		//rp::CmnBuf cmnBuf;
+		//cmnBuf.set_allocated_msgheader(pHead);
+		//cmnBuf.set_content(contentStr);
 
-		//cont.resize(cmnBuf.ByteSizeLong());
-		//char* data = (char*)cont.c_str();
-		//cmnBuf.SerializeToArray(data,cmnBuf.ByteSizeLong());
-		cont = cmnBuf.SerializeAsString();
+		//cont = cmnBuf.SerializeAsString();
+
+		//将包头和内容直接打包并序列化
+		cont = PacketProcess::GetSerializedPacket(PacketProcess::SetPacketHeader(PROTO_TEST_REQ),
+			sContext.SerializeAsString());
 #endif // PROTOBUF
-		singleConnect.SendMsg(&cmnBuf,pHead);
+		//singleConnect.SendMsg(&cmnBuf,pHead);
+		singleConnect.SendMsgAsync(cont);
 
 		Sleep(100000);
 	}

@@ -14,11 +14,12 @@ using namespace std;
 
 #pragma comment(lib,"ws2_32.lib")
 
-#ifdef _AMD64_
+#ifdef NDEBUG
 #pragma comment(lib,"libprotobuf-lite.lib")
 #pragma comment(lib,"libprotobuf.lib")
 #pragma comment(lib,"libprotoc.lib")
-#else
+#elif DEBUG
+#pragma comment(lib,"libprotobuf-lited.lib")
 #pragma comment(lib,"libprotobufd.lib")
 #pragma comment(lib,"libprotocd.lib")
 #endif

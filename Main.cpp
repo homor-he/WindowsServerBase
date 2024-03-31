@@ -28,12 +28,12 @@ int main()
 	//t.detach();
 
 	//测试实现iocp的SingleConnection对象连接服务端 发送异步消息
-	//thread t(TestSingConnectionAsync);
-	//t.detach();
+	thread t(TestSingConnectionAsync);
+	t.detach();
 
 	//测试实现iocp的SingleConnection对象连接服务端 发送同步消息
-thread t(TestSingConnectionSync);
-	t.detach();
+	//thread t(TestSingConnectionSync);
+	//t.detach();
 
 	while (true)
 		Sleep(1000);

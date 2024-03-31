@@ -264,14 +264,11 @@ void ConnectionPool::CloseAll()
 	m_connAsyncList.clear();
 }
 
-uint ConnectionPool::SendMsgAsync(const void* data, int len)
+void ConnectionPool::SendMsgAsync(char* data, int len)
 {
-	return uint();
-}
-
-uint ConnectionPool::SendMsgSync(const void* data, int len, vector<char>* recv)
-{
-	return uint();
+	string sendMsg;
+	sendMsg = sendMsg.append(data, len);
+	m_connAsyncList[(rand() % m_connAsyncList.size())]->SendMsgAsync(sendMsg);
 }
 
 #ifdef PROTOBUF
