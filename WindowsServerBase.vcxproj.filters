@@ -28,6 +28,9 @@
     <Filter Include="Protocol\ProtoBuf_Cpp">
       <UniqueIdentifier>{f845789d-d040-4849-b49e-ae6bff852707}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Protocol\ProtoBuf_Cpp\Release">
+      <UniqueIdentifier>{a6b13d99-68a9-463f-97c5-a54bc983e11a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Log.h">
@@ -105,10 +108,22 @@
     <ClInclude Include="Test_ConnectionPool.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoCommon.pb.h">
-      <Filter>Protocol\ProtoBuf_Cpp</Filter>
-    </ClInclude>
     <ClInclude Include="PacketProcess.h">
+      <Filter>Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtoDefine_Auth.h">
+      <Filter>Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtoDefine_Game.h">
+      <Filter>Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoCommon.pb.h">
+      <Filter>Protocol\ProtoBuf_Cpp\Release</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoAuth.pb.h">
+      <Filter>Protocol\ProtoBuf_Cpp\Release</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorCode.h">
       <Filter>Protocol</Filter>
     </ClInclude>
   </ItemGroup>
@@ -158,11 +173,14 @@
     <ClCompile Include="ConnectionPool.cpp">
       <Filter>SocketRelation</Filter>
     </ClCompile>
-    <ClCompile Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoCommon.pb.cc">
-      <Filter>Protocol\ProtoBuf_Cpp</Filter>
-    </ClCompile>
     <ClCompile Include="PacketProcess.cpp">
       <Filter>Protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoCommon.pb.cc">
+      <Filter>Protocol\ProtoBuf_Cpp\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoAuth.pb.cc">
+      <Filter>Protocol\ProtoBuf_Cpp\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

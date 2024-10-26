@@ -35,6 +35,10 @@ int main()
 	//thread t(TestSingConnectionSync);
 	//t.detach();
 
+	//测试实现ConnectionPool对象连接服务端 发送异步消息
+	//thread t(TestConnectionPoolAsync);
+	//t.detach();
+
 	while (true)
 		Sleep(1000);
 }

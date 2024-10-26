@@ -106,6 +106,7 @@ void LinkNetObj::ParseTestReq(rp::CmnBuf& buf)
 	bool b = contextTest.testbool();
 	/*string str = contextTest.teststring();
 	string bytes = contextTest.testbytes();*/
+	string str = contextTest.teststring();
 
 	int size = contextTest.testuserlist_size();
 	auto userList = contextTest.testuserlist();

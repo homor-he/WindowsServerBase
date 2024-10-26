@@ -230,17 +230,29 @@ bool ConnectionPool::Init(const string& szIP, short wPort, uint svrLinktype, uin
 	for (uint i = 0; i < syncConnCnt; ++i)
 	{
 		string name = "sync-remote:" + m_szIP + ":" + to_string(wPort) + "#" + to_string(i);
-		m_connSyncList.push_back(new SingleConnection(m_szIP, m_wPort, name, svrLinktype, ConnectionType::CntType_Sync, msgHandler));
-		if (!m_connSyncList[i]->Connect())
+		SingleConnection* newSingleConnection = new SingleConnection(m_szIP, m_wPort, name, svrLinktype, ConnectionType::CntType_Sync, msgHandler);
+		if (!newSingleConnection->Connect())
+		{
+			newSingleConnection->CloseConnection();
+			delete newSingleConnection;
+			newSingleConnection = nullptr;
 			m_connectedAll = false;
+		}
+		m_connSyncList.push_back(newSingleConnection);
 	}
 
 	for (uint i = 0; i < asyncConnCnt; ++i)
 	{
 		string name = "async-remote:" + m_szIP + ":" + to_string(wPort) + "#" + to_string(i);
-		m_connAsyncList.push_back(new SingleConnection(m_szIP, m_wPort, name, svrLinktype, ConnectionType::CntType_Async, msgHandler));
-		if (!m_connAsyncList[i]->Connect())
+		SingleConnection* newSingleConnection = new SingleConnection(m_szIP, m_wPort, name, svrLinktype, ConnectionType::CntType_Async, msgHandler);
+		if (!newSingleConnection->Connect())
+		{
+			newSingleConnection->CloseConnection();
+			delete newSingleConnection;
+			newSingleConnection = nullptr;
 			m_connectedAll = false;
+		}
+		m_connAsyncList.push_back(newSingleConnection);
 	}
 	return m_connectedAll;
 }
@@ -269,6 +281,11 @@ void ConnectionPool::SendMsgAsync(char* data, int len)
 	string sendMsg;
 	sendMsg = sendMsg.append(data, len);
 	m_connAsyncList[(rand() % m_connAsyncList.size())]->SendMsgAsync(sendMsg);
+}
+
+void ConnectionPool::SendMsgAsync(string& data)
+{
+	m_connAsyncList[(rand() % m_connAsyncList.size())]->SendMsgAsync(data);
 }
 
 #ifdef PROTOBUF

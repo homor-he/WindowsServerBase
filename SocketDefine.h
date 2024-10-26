@@ -104,7 +104,7 @@ public:
 			m_Socket = INVALID_SOCKET;
 		}
 
-		list<shared_ptr<PER_IO_CONTEXT>>().swap(m_IOContextList);
+		RemoveAllIOContext();
 	}
 
 	shared_ptr<PER_IO_CONTEXT> GetNewIOContext()

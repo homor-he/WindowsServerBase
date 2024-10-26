@@ -89,6 +89,7 @@ void TestSingConnectionAsync()
 		sContext.set_testfloat(2.0f);
 		sContext.set_testint32(3);
 		sContext.set_testbool(true);
+		sContext.set_teststring("ÖÐÎÄ");
 
 		rp::ContentTest::TestUser* pUser = nullptr;
 		for (int i = 0; i < 2; ++i)
@@ -225,10 +226,16 @@ ConnectionPool gbs_Pool;
 void TestConnectionPoolAsync()
 {
 	shared_ptr<RecvMsgHandler> recvMsgHandler = make_shared<RecvMsgHandler>();
-	if (gbs_Pool.Init("192.168.1.3", 30301, SVR_LINK_TYPE_CLIENT, 0, 1, recvMsgHandler))
+	if (gbs_Pool.Init("127.0.0.1", 30301, SVR_LINK_TYPE_CLIENT, 0, 1, recvMsgHandler))
 	{
 		WriteLog("connect 127.0.0.1 success");
 	}
+	else
+	{
+		WriteLog("connect 127.0.0.1 fail");
+		return;
+	}
+		
 
 	while (true)
 	{

@@ -100,7 +100,7 @@ public:
 
 	//当前仅当初始化时有异步连接时使用
 	void SendMsgAsync(char* data, int len);
-	
+	void SendMsgAsync(string& data);
 #ifdef PROTOBUF
 	//与上面同理
 	uint SendMsgAsync(Message* data);

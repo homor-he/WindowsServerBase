@@ -40,7 +40,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -174,15 +174,19 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoAuth.pb.h" />
     <ClInclude Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoCommon.pb.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="CommonFunc.h" />
     <ClInclude Include="ConnectionPool.h" />
     <ClInclude Include="CycleLinkList.h" />
+    <ClInclude Include="ErrorCode.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="LinkNetObj.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="PacketProcess.h" />
+    <ClInclude Include="ProtoDefine_Auth.h" />
+    <ClInclude Include="ProtoDefine_Game.h" />
     <ClInclude Include="ProtoGobalDefine.h" />
     <ClInclude Include="ServerGlobalDefine.h" />
     <ClInclude Include="SocketDefine.h" />
@@ -203,6 +207,7 @@
     <ClInclude Include="TimerWheel.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoAuth.pb.cc" />
     <ClCompile Include="..\DestroyBrickServerKit\Protobuf\include\Protocol\ProtoCommon.pb.cc" />
     <ClCompile Include="CommonFunc.cpp" />
     <ClCompile Include="ConnectionPool.cpp" />

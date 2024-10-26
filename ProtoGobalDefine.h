@@ -1,13 +1,15 @@
 #pragma once
 
 #include "ServerGlobalDefine.h"
+#include "ProtoDefine_Auth.h"
+#include "ProtoDefine_Game.h"
 
 
-
-#ifdef PROTOBUF
+//#ifdef PROTOBUF
 //#define PROTOBUF_USE_DLLS    //在项目预处理器中加入该宏
 
 #include "ProtoCommon.pb.h"
+#include "ProtoAuth.pb.h"
 
 using namespace rp;
 
@@ -23,15 +25,8 @@ using namespace rp;
 #define PROTO_HEARTBEAT  (PROTO_BASE+ 0x0005)		//0x1005
 
 
-#define PROTO_AUTH  0x2000     //用于登录相关协议
 
-#define PROTO_CS_LOGIN_REQ  (PROTO_AUTH+0x0001)		//0x2001
-#define PROTO_CS_LOGIN_ACK  (PROTO_AUTH+0x0002)		//0x2002
-
-
-#define PROTO_GAME 0x3000      //用于游戏业务的协议
-
-#endif // PROTOBUF
+//#endif // PROTOBUF
 
 
 

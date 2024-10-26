@@ -272,6 +272,8 @@ bool TcpThreadServer::DisConnected(PER_SOCKET_CONTEXT* socket)
 		RemoveLinkNetObj(socket->GetSocketFD());
 		//socket不再拥有pLinkNet对象
 		socket->SetLinkNetObj(nullptr);
+		delete socket;
+		socket = nullptr;
 		return true;
 	}
 	return false;
