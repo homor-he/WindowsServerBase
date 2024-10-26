@@ -254,7 +254,7 @@ TcpClient::TcpClient():
 {
 }
 
-TcpClient::TcpClient(const string& szIP, short wPort):
+TcpClient::TcpClient(const std::string& szIP, short wPort):
 	m_cltContext(nullptr),
 	m_IOCompletionPort(nullptr),
 	m_szIP(szIP),
@@ -394,7 +394,7 @@ bool TcpClient::Reconnect()
 	return false;
 }
 
-void TcpClient::SendMsgAsync(string& sendMsg)
+void TcpClient::SendMsgAsync(std::string& sendMsg)
 {
 	if (m_pIocpThreadTask == nullptr)
 	{
@@ -441,8 +441,8 @@ void TcpClient::OnMsg(char* buf, int len)
 		for (int i = 0; i < size; ++i)
 		{
 			rp::ContentTest::TestUser user = userList.Get(i);
-			string account = user.testaccount();
-			string pwd = user.testpwd();
+			std::string account = user.testaccount();
+			std::string pwd = user.testpwd();
 			rp::ContentTest::TestType testType = user.testtype();
 		}
 	}
@@ -455,7 +455,7 @@ void TcpClient::OnMsg(char* buf, int len)
 
 bool TcpClient::SetRecvIO()
 {
-	shared_ptr<PER_IO_CONTEXT> pIoContext = m_cltContext->GetNewIOContext();
+	std::shared_ptr<PER_IO_CONTEXT> pIoContext = m_cltContext->GetNewIOContext();
 	if (pIoContext)
 	{
 		if (m_pIocpThreadTask->PostRecv(pIoContext.get(), m_cltContext) == false)

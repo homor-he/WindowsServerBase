@@ -1,6 +1,10 @@
 #pragma once
 
 #include <windows.h>
+#include <shared_mutex>
+
+typedef std::unique_lock<std::shared_mutex> WAutoLock;
+typedef std::shared_lock<std::shared_mutex> RAutoLock;
 
 class CThreadMutex
 {
@@ -31,3 +35,6 @@ public:
 private:
 	CThreadMutex& m_mutex;
 };
+
+
+

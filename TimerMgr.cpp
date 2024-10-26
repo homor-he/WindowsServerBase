@@ -18,7 +18,7 @@ TimerMgr::~TimerMgr()
 
 void TimerMgr::Start()
 {
-	unique_ptr<thread> t(new thread([&] {
+	std::unique_ptr<std::thread> t(new std::thread([&] {
 		while (!m_QuitExecuteThread)
 		{
 			AutoLock autoLock(m_timerMutex);

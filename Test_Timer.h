@@ -26,7 +26,7 @@ public:
 	void Debug(void* para)
 	{
 		char* str = (char*)para;
-		cout << str << endl;
+		std::cout << str << std::endl;
 	}
 };
 

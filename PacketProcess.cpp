@@ -12,7 +12,7 @@ CmnBuf_MsgHead* PacketProcess::SetPacketHeader(uint32 type, uint32 orgin, uint32
 	return pHeader;
 }
 
-std::string PacketProcess::GetSerializedPacket(CmnBuf_MsgHead* header, const string& content)
+std::string PacketProcess::GetSerializedPacket(CmnBuf_MsgHead* header, const std::string& content)
 {
 	CmnBuf cmnBuf;
 	cmnBuf.set_allocated_msgheader(header);

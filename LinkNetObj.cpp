@@ -52,7 +52,7 @@ bool LinkNetObj::OnDisconnected(PER_SOCKET_CONTEXT* conn)
 	return false;
 }
 
-bool LinkNetObj::SendMsgAsync(string& sendMsg)
+bool LinkNetObj::SendMsgAsync(std::string& sendMsg)
 {
 	m_sockOpera->PostSend((char*)sendMsg.c_str(), sendMsg.size());
 	return true;
@@ -67,7 +67,7 @@ void LinkNetObj::SendBuildConnectAck()
 	cmnBuf.set_allocated_msgheader(pHead);
 	cmnBuf.set_allocated_content(nullptr);
 
-	string cont = cmnBuf.SerializeAsString();
+	std::string cont = cmnBuf.SerializeAsString();
 	SendMsgAsync(cont);
 }
 
@@ -106,24 +106,24 @@ void LinkNetObj::ParseTestReq(rp::CmnBuf& buf)
 	bool b = contextTest.testbool();
 	/*string str = contextTest.teststring();
 	string bytes = contextTest.testbytes();*/
-	string str = contextTest.teststring();
+	std::string str = contextTest.teststring();
 
 	int size = contextTest.testuserlist_size();
 	auto userList = contextTest.testuserlist();
 	for (int i = 0; i < size; ++i)
 	{
 		rp::ContentTest::TestUser user = userList.Get(i);
-		string account = user.testaccount();
-		string pwd = user.testpwd();
+		std::string account = user.testaccount();
+		std::string pwd = user.testpwd();
 		rp::ContentTest::TestType testType = user.testtype();
 	}
 
-	string sReq = buf.SerializeAsString();
+	std::string sReq = buf.SerializeAsString();
 	SendMsgAsync(sReq);
 }
 
 void LinkNetObj::ParseHeartBeat(rp::CmnBuf& buf)
 {
-	string sReq = buf.SerializeAsString();
+	std::string sReq = buf.SerializeAsString();
 	SendMsgAsync(sReq);
 }

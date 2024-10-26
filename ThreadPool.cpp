@@ -23,14 +23,14 @@ void ThreadPool::Start()
 {
 	for (DWORD i = 0; i < m_numThread; ++i)
 	{
-		string name = "Thread" + to_string(i);
+		std::string name = "Thread" + std::to_string(i);
 		Thread* pThread = new Thread(name, i);
-		m_threadList.push_back(move(pThread));
+		m_threadList.push_back(std::move(pThread));
 		pThread->Start();
 	}
 }
 
-void ThreadPool::AddTask(function<void()> CallBack)
+void ThreadPool::AddTask(std::function<void()> CallBack)
 {
 	DWORD expect = m_numThread;
 	DWORD desired = 0;

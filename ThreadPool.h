@@ -16,11 +16,11 @@ public:
 	~ThreadPool();
 
 	void Start();
-	void AddTask(function<void()> CallBack);
+	void AddTask(std::function<void()> CallBack);
 	void RemoveAllThread();
 protected:
 	DWORD m_numThread;
-	atomic<DWORD> m_threadIndex;
-	vector<Thread*> m_threadList;
+	std::atomic<DWORD> m_threadIndex;
+	std::vector<Thread*> m_threadList;
 };
 

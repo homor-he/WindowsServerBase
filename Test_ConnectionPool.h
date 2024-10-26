@@ -57,8 +57,8 @@ inline void RecvMsgHandler::OnRecvMsgAsync(const SingleConnection& connection, s
 		for (int i = 0; i < size; ++i)
 		{
 			rp::ContentTest::TestUser user = userList.Get(i);
-			string account = user.testaccount();
-			string pwd = user.testpwd();
+			std::string account = user.testaccount();
+			std::string pwd = user.testpwd();
 			rp::ContentTest::TestType testType = user.testtype();
 		}
 	}
@@ -75,14 +75,14 @@ inline void RecvMsgHandler::OnRecvMsgAsync(const SingleConnection& connection, s
 
 void TestSingConnectionAsync()
 {
-	shared_ptr<RecvMsgHandler> recvMsgHandler = make_shared<RecvMsgHandler>();
+	std::shared_ptr<RecvMsgHandler> recvMsgHandler = std::make_shared<RecvMsgHandler>();
 	SingleConnection singleConnect("127.0.0.1", 30301, "", SVR_LINK_TYPE_UNKNOWN, CntType_Async, recvMsgHandler);
 	if (!singleConnect.Connect())
 		return;
 
 	while (true)
 	{
-		string cont;
+		std::string cont;
 #ifdef PROTOBUF
 		rp::ContentTest sContext;
 		sContext.set_testdouble(1.0);
@@ -95,9 +95,9 @@ void TestSingConnectionAsync()
 		for (int i = 0; i < 2; ++i)
 		{
 			pUser = sContext.add_testuserlist();
-			string szAccount = "TestUser" + to_string(i);
+			std::string szAccount = "TestUser" + std::to_string(i);
 			pUser->set_testaccount(szAccount);
-			pUser->set_testpwd(to_string(i << i));
+			pUser->set_testpwd(std::to_string(i << i));
 			pUser->set_testtype(rp::ContentTest::TestType::ContentTest_TestType_PC);
 		}
 		//string contentStr = sContext.SerializeAsString();
@@ -125,14 +125,14 @@ void TestSingConnectionAsync()
 
 void TestSingConnectionSync()
 {
-	shared_ptr<RecvMsgHandler> recvMsgHandler = make_shared<RecvMsgHandler>();
+	std::shared_ptr<RecvMsgHandler> recvMsgHandler = std::make_shared<RecvMsgHandler>();
 	SingleConnection singleConnect("127.0.0.1", 30301, "", SVR_LINK_TYPE_UNKNOWN, CntType_Sync, recvMsgHandler);
 	if (!singleConnect.Connect())
 		return;
 
 	while (true)
 	{
-		string cont;
+		std::string cont;
 #ifdef PROTOBUF
 		rp::ContentTest sContext;
 		sContext.set_testdouble(1.0);
@@ -144,12 +144,12 @@ void TestSingConnectionSync()
 		for (int i = 0; i < 2; ++i)
 		{
 			pUser = sContext.add_testuserlist();
-			string szAccount = "TestUser" + to_string(i);
+			std::string szAccount = "TestUser" + std::to_string(i);
 			pUser->set_testaccount(szAccount);
-			pUser->set_testpwd(to_string(i << i));
+			pUser->set_testpwd(std::to_string(i << i));
 			pUser->set_testtype(rp::ContentTest::TestType::ContentTest_TestType_PC);
 		}
-		string contentStr = sContext.SerializeAsString();
+		std::string contentStr = sContext.SerializeAsString();
 		//²âÊÔÐ­Òé
 		rp::CmnBuf_MsgHead* pHead = new rp::CmnBuf_MsgHead;
 		pHead->set_msgtype(PROTO_TEST_REQ);
@@ -209,8 +209,8 @@ void TestSingConnectionSync()
 			for (int i = 0; i < size; ++i)
 			{
 				rp::ContentTest::TestUser user = userList.Get(i);
-				string account = user.testaccount();
-				string pwd = user.testpwd();
+				std::string account = user.testaccount();
+				std::string pwd = user.testpwd();
 				rp::ContentTest::TestType testType = user.testtype();
 			}
 		}
@@ -225,7 +225,7 @@ void TestSingConnectionSync()
 ConnectionPool gbs_Pool;
 void TestConnectionPoolAsync()
 {
-	shared_ptr<RecvMsgHandler> recvMsgHandler = make_shared<RecvMsgHandler>();
+	std::shared_ptr<RecvMsgHandler> recvMsgHandler = std::make_shared<RecvMsgHandler>();
 	if (gbs_Pool.Init("127.0.0.1", 30301, SVR_LINK_TYPE_CLIENT, 0, 1, recvMsgHandler))
 	{
 		WriteLog("connect 127.0.0.1 success");

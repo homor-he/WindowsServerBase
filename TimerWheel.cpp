@@ -3,7 +3,7 @@
 #include "Log.h"
 #include <algorithm>
 
-using namespace std;
+//using namespace std;
 
 #define FIRST_INDEX(v) ((v) & TWF_MASK)
 #define NTH_INDEX(v,n) (((v)>>(TWF_BITS +(n)* TWN_BITS )) & TWN_MASK)
@@ -51,15 +51,15 @@ ThreadPool gbs_TimerThreadPool;
 //	return true;
 //}
 
-TimerNode* FindTimerNode(map<DWORD, TimerNode*>& nodeList, DWORD uniqueID)
+TimerNode* FindTimerNode(std::map<DWORD, TimerNode*>& nodeList, DWORD uniqueID)
 {
-	map<DWORD, TimerNode*>::iterator itor = nodeList.find(uniqueID);
+	std::map<DWORD, TimerNode*>::iterator itor = nodeList.find(uniqueID);
 	if (itor != nodeList.end())
 		return itor->second;
 	return nullptr;
 }
 
-bool InsertTimerNode(map<DWORD, TimerNode*>& nodeList, TimerNode* node)
+bool InsertTimerNode(std::map<DWORD, TimerNode*>& nodeList, TimerNode* node)
 {
 	if (nodeList.count(node->uniqueID) == 1)
 	{
@@ -68,14 +68,14 @@ bool InsertTimerNode(map<DWORD, TimerNode*>& nodeList, TimerNode* node)
 	}
 	else
 	{
-		nodeList.insert(pair<DWORD, TimerNode*>(node->uniqueID, node));
+		nodeList.insert(std::pair<DWORD, TimerNode*>(node->uniqueID, node));
 		return true;
 	}
 }
 
-bool RemoveTimerNode(map<DWORD, TimerNode*>& nodeList, TimerNode* node)
+bool RemoveTimerNode(std::map<DWORD, TimerNode*>& nodeList, TimerNode* node)
 {
-	map<DWORD, TimerNode*>::iterator itor = nodeList.find(node->uniqueID);
+	std::map<DWORD, TimerNode*>::iterator itor = nodeList.find(node->uniqueID);
 	if (itor != nodeList.end())
 		nodeList.erase(itor);
 	return true;

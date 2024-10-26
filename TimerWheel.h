@@ -12,9 +12,9 @@ extern ThreadPool gbs_TimerThreadPool;
 //TimerNode* FindTimerNode(vector<TimerNode*>& nodeList, DWORD uniqueID);
 //bool InsertTimerNode(vector<TimerNode*>& nodeList, TimerNode* node);
 //bool RemoveTimerNode(vector<TimerNode*>& nodeList, TimerNode* node);
-TimerNode* FindTimerNode(map<DWORD,TimerNode*>& nodeList, DWORD uniqueID);
-bool InsertTimerNode(map<DWORD, TimerNode*>& nodeList, TimerNode* node);
-bool RemoveTimerNode(map<DWORD, TimerNode*>& nodeList, TimerNode* node);
+TimerNode* FindTimerNode(std::map<DWORD,TimerNode*>& nodeList, DWORD uniqueID);
+bool InsertTimerNode(std::map<DWORD, TimerNode*>& nodeList, TimerNode* node);
+bool RemoveTimerNode(std::map<DWORD, TimerNode*>& nodeList, TimerNode* node);
 
 // 初始化时间轮，interval为每刻度的时间间隔，currentTime为当前时间
 void TimerWheel_init(TimerWheel* tw, uint16_t interval, uint64_t currentTime);

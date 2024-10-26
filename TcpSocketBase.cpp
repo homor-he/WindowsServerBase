@@ -57,7 +57,7 @@ bool TcpSocketBase::Close()
 	return true;
 }
 
-bool TcpSocketBase::Bind(const string& ip, short port)
+bool TcpSocketBase::Bind(const std::string& ip, short port)
 {
 	SetIP(ip);
 	SetPort(port);
@@ -97,7 +97,7 @@ bool TcpSocketBase::Listen(int num, isNonBlock isblock)
 	return true;
 }
 
-bool TcpSocketBase::Accept(TcpSocketBase* peer, string* ip, USHORT* port, isOverLapped check, isNonBlock isblock) const
+bool TcpSocketBase::Accept(TcpSocketBase* peer, std::string* ip, USHORT* port, isOverLapped check, isNonBlock isblock) const
 {
 	sockaddr_in client_addr;
 	int addrLen = sizeof(client_addr);
@@ -129,7 +129,7 @@ bool TcpSocketBase::Accept(TcpSocketBase* peer, string* ip, USHORT* port, isOver
 	return true;
 }
 
-bool TcpSocketBase::Recv(string* buf) const
+bool TcpSocketBase::Recv(std::string* buf) const
 {
 	buf->clear();
 
@@ -223,7 +223,7 @@ bool TcpSocketBase::Send(char* buf, int bufLen) const
 	return true;
 }
 
-bool TcpSocketBase::Connect(string& ip, short port)
+bool TcpSocketBase::Connect(std::string& ip, short port)
 {
 	sockaddr_in addr;
 	addr.sin_family = AF_INET;
@@ -252,7 +252,7 @@ int TcpSocketBase::SetSocketNonBlocking(SOCKET fd)
 	return ioctlsocket(m_sock, FIONBIO, (unsigned long*)&ul);
 }
 
-void TcpSocketBase::SetIP(string szIP)
+void TcpSocketBase::SetIP(std::string szIP)
 {
 	this->m_szIP = szIP;
 }
@@ -262,7 +262,7 @@ void TcpSocketBase::SetPort(short port)
 	this->m_port = port;
 }
 
-string TcpSocketBase::GetIP()
+std::string TcpSocketBase::GetIP()
 {
 	return m_szIP;
 }

@@ -61,11 +61,11 @@ bool TcpThreadServer::StartServer()
 {
 	if (Init())
 	{
-		m_sockHandleThreadPool = make_shared<ThreadPool>(m_threadNum);
-		m_taskThreadPool = make_shared<ThreadPool>(m_threadNum);
+		m_sockHandleThreadPool = std::make_shared<ThreadPool>(m_threadNum);
+		m_taskThreadPool = std::make_shared<ThreadPool>(m_threadNum);
 		for (int i = 0; i < m_threadNum; ++i)
 		{
-			shared_ptr<SocketHandler> pHandler = make_shared<SocketHandler>();
+			std::shared_ptr<SocketHandler> pHandler = std::make_shared<SocketHandler>();
 			pHandler->SetIOCP(m_IOCompletionPort);
 			pHandler->SetTcpThreadServer(this);
 			m_sockHandleThreadPool->AddTask(bind(&SocketHandler::Execute, pHandler, nullptr));
@@ -80,7 +80,7 @@ bool TcpThreadServer::StartServer()
 		return false;
 }
 
-void TcpThreadServer::SetPara(const string& szIP, short wPort, int threadNum)
+void TcpThreadServer::SetPara(const std::string& szIP, short wPort, int threadNum)
 {
 	m_szIP = szIP;
 	m_wPort = wPort;
@@ -122,7 +122,7 @@ bool TcpThreadServer::HandleNewConn()
 				return false;
 			}
 
-			shared_ptr<PER_IO_CONTEXT> pNewIOContext = pNewSockContext->GetNewIOContext();
+			std::shared_ptr<PER_IO_CONTEXT> pNewIOContext = pNewSockContext->GetNewIOContext();
 			if (pNewIOContext)
 			{
 				if (PostRecv(pNewIOContext, pNewSockContext) == false)
@@ -134,7 +134,7 @@ bool TcpThreadServer::HandleNewConn()
 				{
 					AutoLock lock(m_sockListMutex);
 					//m_socketList.push_back(pNewSockContext);
-					m_socketList.insert(pair<SOCKET, PER_SOCKET_CONTEXT*>(pNewSockContext->GetSocketFD(), pNewSockContext));
+					m_socketList.insert(std::pair<SOCKET, PER_SOCKET_CONTEXT*>(pNewSockContext->GetSocketFD(), pNewSockContext));
 					pNewSockContext->AddRef();
 				}
 			}
@@ -148,7 +148,7 @@ bool TcpThreadServer::HandleNewConn()
 	return false;
 }
 
-bool TcpThreadServer::PostRecv(shared_ptr<PER_IO_CONTEXT> pIOContext, PER_SOCKET_CONTEXT* pSocketContext)
+bool TcpThreadServer::PostRecv(std::shared_ptr<PER_IO_CONTEXT> pIOContext, PER_SOCKET_CONTEXT* pSocketContext)
 {
 	pIOContext->ResetBuffer();
 	pIOContext->m_OpType = RECV_POSTED;
@@ -184,7 +184,7 @@ bool TcpThreadServer::PostRecv(shared_ptr<PER_IO_CONTEXT> pIOContext, PER_SOCKET
 void TcpThreadServer::RemoveSocketContext(SOCKET sock)
 {
 	AutoLock lock(m_sockListMutex);
-	map<SOCKET, PER_SOCKET_CONTEXT*>::iterator it = m_socketList.find(sock);
+	std::map<SOCKET, PER_SOCKET_CONTEXT*>::iterator it = m_socketList.find(sock);
 	if (it != m_socketList.end())
 	{
 		m_socketList.erase(it);
@@ -194,7 +194,7 @@ void TcpThreadServer::RemoveSocketContext(SOCKET sock)
 void TcpThreadServer::DeleteSocketContext(SOCKET sock)
 {
 	AutoLock lock(m_sockListMutex);
-	map<SOCKET, PER_SOCKET_CONTEXT*>::iterator it = m_socketList.find(sock);
+	std::map<SOCKET, PER_SOCKET_CONTEXT*>::iterator it = m_socketList.find(sock);
 	if (it != m_socketList.end())
 	{
 		delete it->second;
@@ -209,7 +209,7 @@ void TcpThreadServer::OnMsg(PER_SOCKET_CONTEXT* socket, char* buf, int len)
 	//recvMsg.append(buf, len);
 	//WriteLog("RECV MSG :%s",recvMsg.c_str());
 	
-	share_buff buff = make_shared<vector<char>>(buf, buf + len);
+	share_buff buff = std::make_shared<std::vector<char>>(buf, buf + len);
 	m_taskThreadPool->AddTask(bind(&TcpThreadServer::OnAsyncMsg, this, socket, buff));
 }
 
@@ -236,7 +236,7 @@ void TcpThreadServer::OnAsyncMsg(PER_SOCKET_CONTEXT* socket, share_buff buff)
 	if (header.msgtype() == PROTO_BUILD_CONN_REQ)
 	{
 		UINT linkType = header.origin();
-		shared_ptr<LinkNetObj> pLinkNetObj = AddLinkNetObj(socket, linkType);
+		std::shared_ptr<LinkNetObj> pLinkNetObj = AddLinkNetObj(socket, linkType);
 		if (pLinkNetObj)
 		{
 			//只让LinkNetObj拥有PER_SOCKET_CONTEXT的指针对象
@@ -265,7 +265,7 @@ void TcpThreadServer::OnAsyncMsg(PER_SOCKET_CONTEXT* socket, share_buff buff)
 
 bool TcpThreadServer::DisConnected(PER_SOCKET_CONTEXT* socket)
 {
-	shared_ptr<LinkNetObj> pLinkNetObj = GetLinkNetObj(socket);
+	std::shared_ptr<LinkNetObj> pLinkNetObj = GetLinkNetObj(socket);
 	if (pLinkNetObj)
 	{
 		pLinkNetObj->OnDisconnected(socket);
@@ -279,9 +279,9 @@ bool TcpThreadServer::DisConnected(PER_SOCKET_CONTEXT* socket)
 	return false;
 }
 
-shared_ptr<LinkNetObj> TcpThreadServer::AddLinkNetObj(PER_SOCKET_CONTEXT* socket, UINT type)
+std::shared_ptr<LinkNetObj> TcpThreadServer::AddLinkNetObj(PER_SOCKET_CONTEXT* socket, UINT type)
 {
-	shared_ptr<LinkNetObj> pLinkObj = CreateLinkNetObjBase(socket, type);
+	std::shared_ptr<LinkNetObj> pLinkObj = CreateLinkNetObjBase(socket, type);
 	if (pLinkObj)
 	{
 		AutoLock lock(m_linkNetMapLock);
@@ -290,28 +290,28 @@ shared_ptr<LinkNetObj> TcpThreadServer::AddLinkNetObj(PER_SOCKET_CONTEXT* socket
 			//使socket能获取linkObj指针对象
 			socket->SetLinkNetObj(pLinkObj);
 
-			m_linkNetMap.insert(pair<UINT, shared_ptr<LinkNetObj>>(socket->GetSocketFD(), pLinkObj));
+			m_linkNetMap.insert(std::pair<UINT, std::shared_ptr<LinkNetObj>>(socket->GetSocketFD(), pLinkObj));
 			return pLinkObj;
 		}
 	}
 	return nullptr;
 }
 
-const shared_ptr<LinkNetObj> TcpThreadServer::GetLinkNetObj(const PER_SOCKET_CONTEXT* socket)
+const std::shared_ptr<LinkNetObj> TcpThreadServer::GetLinkNetObj(const PER_SOCKET_CONTEXT* socket)
 {
 	AutoLock lock(m_linkNetMapLock);
-	map<UINT, shared_ptr<LinkNetObj>>::iterator it = m_linkNetMap.find((UINT)socket->GetSocketFD());
+	std::map<UINT, std::shared_ptr<LinkNetObj>>::iterator it = m_linkNetMap.find((UINT)socket->GetSocketFD());
 	if (it != m_linkNetMap.end())
 		return it->second;
 	return nullptr;
 }
 
-shared_ptr<LinkNetObj> TcpThreadServer::CreateLinkNetObjBase(PER_SOCKET_CONTEXT* socket, UINT type)
+std::shared_ptr<LinkNetObj> TcpThreadServer::CreateLinkNetObjBase(PER_SOCKET_CONTEXT* socket, UINT type)
 {
 	switch (type)
 	{
 	case SVR_LINK_TYPE_UNKNOWN:
-		return make_shared<LinkNetObj>(socket, type);
+		return std::make_shared<LinkNetObj>(socket, type);
 	case SVR_LINK_TYPE_CLIENT:
 		break;
 	default:
@@ -323,7 +323,7 @@ shared_ptr<LinkNetObj> TcpThreadServer::CreateLinkNetObjBase(PER_SOCKET_CONTEXT*
 bool TcpThreadServer::RemoveLinkNetObj(SOCKET sock)
 {
 	AutoLock lock(m_linkNetMapLock);
-	map<UINT, shared_ptr<LinkNetObj>>::iterator it = m_linkNetMap.find((UINT)sock);
+	std::map<UINT, std::shared_ptr<LinkNetObj>>::iterator it = m_linkNetMap.find((UINT)sock);
 	if (it != m_linkNetMap.end())
 	{
 		m_linkNetMap.erase(it);

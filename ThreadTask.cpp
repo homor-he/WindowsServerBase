@@ -8,8 +8,8 @@ ThreadTask::ThreadTask() :
 void ThreadTask::Execute(void* para)
 {
 	m_quit.store(false);
-	function<void()> callBack;
-	queue<function<void()>> tmpQueue;
+	std::function<void()> callBack;
+	std::queue<std::function<void()>> tmpQueue;
 	{
 		AutoLock autoLock(m_mutex);
 		tmpQueue.swap(m_callbackList);
@@ -25,7 +25,7 @@ void ThreadTask::Execute(void* para)
 	m_quit.store(true);
 }
 
-bool ThreadTask::AddTask(function<void()> callback)
+bool ThreadTask::AddTask(std::function<void()> callback)
 {
 	AutoLock autoLock(m_mutex);
 	m_callbackList.push(callback);

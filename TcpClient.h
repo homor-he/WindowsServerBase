@@ -40,7 +40,7 @@ class TcpClient
 	friend class TcpClientIocpTask;
 public:
 	TcpClient();
-	TcpClient(const string & szIP, short wPort);
+	TcpClient(const std::string & szIP, short wPort);
 	virtual ~TcpClient();
 
 	virtual bool Connect();
@@ -53,7 +53,7 @@ public:
 
 	bool GetCloseStat();
 	
-	void SendMsgAsync(string & sendMsg);
+	void SendMsgAsync(std::string & sendMsg);
 	virtual void OnMsg(char* buf, int len);
 private:
 	bool SetRecvIO();
@@ -63,12 +63,12 @@ private:
 	bool m_closed;
 
 	HANDLE m_IOCompletionPort;
-	string m_szIP;
+	std::string m_szIP;
 	short m_wPort;
 
 	Thread m_iocpThread;
 	TcpClientIocpTask* m_pIocpThreadTask;
 
 	int m_reconnectTimes;
-	atomic<bool> m_bReconnectStarted;
+	std::atomic<bool> m_bReconnectStarted;
 };

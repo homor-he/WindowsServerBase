@@ -13,7 +13,7 @@
 #include "ServerGlobalDefine.h"
 #include "LinkNetObj.h"
 
-using namespace std;
+//using namespace std;
 
 #define MAX_BUFFER_LEN   8 * 1024
 
@@ -82,10 +82,10 @@ private:
 	SOCKET m_Socket;						
 	SOCKADDR_IN m_PeerAddr;
 	SOCKADDR_IN m_LocalAddr;
-	atomic_uint16_t m_Ref;
-	list<shared_ptr<PER_IO_CONTEXT>> m_IOContextList; //套接字操作，本例是WSARecv和WSASend共用一个PER_IO_CONTEXT
+	std::atomic_uint16_t m_Ref;
+	std::list<std::shared_ptr<PER_IO_CONTEXT>> m_IOContextList; //套接字操作，本例是WSARecv和WSASend共用一个PER_IO_CONTEXT
 	CThreadMutex m_IOContextListMutex;
-	shared_ptr<LinkNetObj> m_pLinkNetObj;
+	std::shared_ptr<LinkNetObj> m_pLinkNetObj;
 public:
 	PER_SOCKET_CONTEXT()
 	{
@@ -107,9 +107,9 @@ public:
 		RemoveAllIOContext();
 	}
 
-	shared_ptr<PER_IO_CONTEXT> GetNewIOContext()
+	std::shared_ptr<PER_IO_CONTEXT> GetNewIOContext()
 	{
-		shared_ptr<PER_IO_CONTEXT> newIOContext = make_shared<PER_IO_CONTEXT>();
+		std::shared_ptr<PER_IO_CONTEXT> newIOContext = std::make_shared<PER_IO_CONTEXT>();
 		AutoLock lock(m_IOContextListMutex);
 		m_IOContextList.push_back(newIOContext);
 		return newIOContext;
@@ -120,7 +120,7 @@ public:
 		if (pContext == nullptr)
 			return;
 		AutoLock lock(m_IOContextListMutex);
-		list<shared_ptr<PER_IO_CONTEXT>>::iterator it = m_IOContextList.begin();
+		std::list<std::shared_ptr<PER_IO_CONTEXT>>::iterator it = m_IOContextList.begin();
 		for (; it != m_IOContextList.end(); ++it)
 		{
 			if (pContext == (*it).get())
@@ -135,7 +135,7 @@ public:
 	{
 		AutoLock lock(m_IOContextListMutex);
 		DWORD resetCount = (DWORD)m_IOContextList.size();
-		list<shared_ptr<PER_IO_CONTEXT>>().swap(m_IOContextList);
+		std::list<std::shared_ptr<PER_IO_CONTEXT>>().swap(m_IOContextList);
 		return resetCount;
 	}
 
@@ -144,7 +144,7 @@ public:
 		m_Ref++;
 	}
 
-	atomic_uint16_t & Release()
+	std::atomic_uint16_t & Release()
 	{
 		m_Ref--;
 		return m_Ref;
@@ -153,7 +153,7 @@ public:
 
 	void PostSend(char* buffer, int len)
 	{
-		shared_ptr<PER_IO_CONTEXT> pIOContext = GetNewIOContext();
+		std::shared_ptr<PER_IO_CONTEXT> pIOContext = GetNewIOContext();
 		pIOContext->ResetBuffer();
 		pIOContext->m_OpType = SEND_POSTED;
 		pIOContext->m_sockAccept = this->m_Socket;
@@ -204,11 +204,11 @@ public:
 		return ntohs(m_PeerAddr.sin_port);
 	}
 
-	string GetPeerIPPort() const
+	std::string GetPeerIPPort() const
 	{
 		char hostAddr[LEN_HOSTADDR] = { 0 };
 		sprintf_s(hostAddr, "%s:%d", GetPeerIP(), GetPeerPort());
-		return move(string(hostAddr));
+		return move(std::string(hostAddr));
 	}
 
 	char* GetLocalIP() const
@@ -221,14 +221,14 @@ public:
 		return ntohs(m_LocalAddr.sin_port);
 	}
 
-	string GetLocalIPPort() const
+	std::string GetLocalIPPort() const
 	{
 		char hostAddr[LEN_HOSTADDR] = { 0 };
 		sprintf_s(hostAddr, "%s:%d", GetLocalIP(), GetLocalPort());
-		return move(string(hostAddr));
+		return move(std::string(hostAddr));
 	}
 
-	void SetLinkNetObj(shared_ptr<LinkNetObj> pObj)
+	void SetLinkNetObj(std::shared_ptr<LinkNetObj> pObj)
 	{
 		m_pLinkNetObj = pObj;
 	}

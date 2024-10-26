@@ -20,5 +20,5 @@ public:
 	/// <returns></returns>
 	static CmnBuf_MsgHead* SetPacketHeader(uint32 type, uint32 orgin = 0, uint32 orderID =0, 
 		uint32 respondID =0, uint32 errorCode =0);
-	static std::string GetSerializedPacket(CmnBuf_MsgHead* header, const string& content);
+	static std::string GetSerializedPacket(CmnBuf_MsgHead* header, const std::string& content);
 };

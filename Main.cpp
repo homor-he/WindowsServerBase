@@ -28,7 +28,7 @@ int main()
 	//t.detach();
 
 	//测试实现iocp的SingleConnection对象连接服务端 发送异步消息
-	thread t(TestSingConnectionAsync);
+	std::thread t(TestSingConnectionAsync);
 	t.detach();
 
 	//测试实现iocp的SingleConnection对象连接服务端 发送同步消息

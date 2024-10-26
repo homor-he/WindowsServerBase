@@ -19,8 +19,8 @@ void TestThreadPool()
 {
 	ThreadPool pool;
 	pool.Start();
-	pool.AddTask(bind(Add, 3, 4));
-	pool.AddTask(bind(Del, 4, 3));
+	pool.AddTask(std::bind(Add, 3, 4));
+	pool.AddTask(std::bind(Del, 4, 3));
 	while (true)
 	{
 		Sleep(1000);

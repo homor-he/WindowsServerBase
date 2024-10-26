@@ -11,7 +11,7 @@ Thread::Thread() :
 {
 }
 
-Thread::Thread(const string& name, int threadNo, ThreadTask* task, bool defaultTask) :
+Thread::Thread(const std::string& name, int threadNo, ThreadTask* task, bool defaultTask) :
 	m_quit(false),
 	m_started(false),
 	m_threadID(0),

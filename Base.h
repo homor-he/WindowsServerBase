@@ -6,7 +6,7 @@
 #include <windef.h>
 #include <string>
 
-using namespace std;
+//using namespace std;
 
 //#define _CRT_SECURE_NO_WARNINGS  //解决没有_s函数的warning
 

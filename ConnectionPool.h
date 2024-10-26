@@ -53,8 +53,8 @@ public:
 class SingleConnection : public TcpClient
 {
 public:
-	SingleConnection(const string& szIP, short wPort, string name, UINT svrLinkType,ConnectionType cntType = CntType_Async,
-		shared_ptr<ConnectionMsgHandler> msgHandler = nullptr);
+	SingleConnection(const std::string& szIP, short wPort, std::string name, UINT svrLinkType,ConnectionType cntType = CntType_Async,
+		std::shared_ptr<ConnectionMsgHandler> msgHandler = nullptr);
 	virtual ~SingleConnection();
 	void CloseConnection();
 
@@ -79,13 +79,13 @@ private:
 private:
 	UINT m_svrLinkType;
 	ConnectionType m_cntType;
-	atomic<UINT> m_orderID;
-	shared_ptr<ConnectionMsgHandler> m_msgHandler;
+	std::atomic<UINT> m_orderID;
+	std::shared_ptr<ConnectionMsgHandler> m_msgHandler;
 
 	CThreadMutex m_mutexSyncEvent;
 	std::map<UINT, SyncMsgPairInfo*> m_mapSyncEvent;  //key为orderID
 
-	string m_name;
+	std::string m_name;
 };
 
 class ConnectionPool
@@ -94,26 +94,26 @@ public:
 	ConnectionPool(void);
 	virtual ~ConnectionPool(void);
 
-	bool Init(const string& szIP, short wPort, uint svrLinktype = SVR_LINK_TYPE_UNKNOWN, uint syncConnCnt = DEFALUT_CONN_CNT,
-		uint asyncConnCnt = DEFALUT_CONN_CNT, shared_ptr<ConnectionMsgHandler> msgHandler = nullptr);
+	bool Init(const std::string& szIP, short wPort, uint svrLinktype = SVR_LINK_TYPE_UNKNOWN, uint syncConnCnt = DEFALUT_CONN_CNT,
+		uint asyncConnCnt = DEFALUT_CONN_CNT, std::shared_ptr<ConnectionMsgHandler> msgHandler = nullptr);
 	void CloseAll();
 
 	//当前仅当初始化时有异步连接时使用
 	void SendMsgAsync(char* data, int len);
-	void SendMsgAsync(string& data);
+	void SendMsgAsync(std::string& data);
 #ifdef PROTOBUF
 	//与上面同理
 	uint SendMsgAsync(Message* data);
 	uint SendMsgSync(Message* data, rp::CmnBuf::MsgHead* header, share_buff recv = nullptr);
 #endif
 protected:
-	atomic<uint> m_syncConnIndex;
-	vector<SingleConnection*> m_connSyncList;
+	std::atomic<uint> m_syncConnIndex;
+	std::vector<SingleConnection*> m_connSyncList;
 
-	atomic<uint> m_asyncConnIndex;
-	vector<SingleConnection*> m_connAsyncList;
+	std::atomic<uint> m_asyncConnIndex;
+	std::vector<SingleConnection*> m_connAsyncList;
 private:
-	string m_szIP;
+	std::string m_szIP;
 	short m_wPort;
 	bool m_connectedAll;
 };

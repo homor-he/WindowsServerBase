@@ -1,8 +1,8 @@
 #include "ConnectionPool.h"
 #include "Event.h"
 
-SingleConnection::SingleConnection(const string& szIP, short wPort, string name, UINT svrLinkType, ConnectionType cntType,
-	shared_ptr<ConnectionMsgHandler> msgHandler):
+SingleConnection::SingleConnection(const std::string& szIP, short wPort, std::string name, UINT svrLinkType, ConnectionType cntType,
+	std::shared_ptr<ConnectionMsgHandler> msgHandler):
 	TcpClient(szIP,wPort),
 	m_svrLinkType(svrLinkType),
 	m_cntType(cntType),
@@ -58,7 +58,7 @@ UINT SingleConnection::SendMsg(Message* msg, rp::CmnBuf::MsgHead* header, share_
 		return SendMsgSync(msg, header, recvMsg);
 	case CntType_Async:
 	{
-		string sendMsg = msg->SerializeAsString();
+		std::string sendMsg = msg->SerializeAsString();
 		SendMsgAsync(sendMsg);
 		return SEND_MSG_SUCCESS;
 	}
@@ -74,7 +74,7 @@ UINT SingleConnection::SendMsgSync(Message* msg, rp::CmnBuf::MsgHead* header, sh
 		return SEND_MSG_FAIL;
 	if (header->msgtype() == PROTO_BUILD_CONN_REQ)
 	{
-		string sendMsg = msg->SerializeAsString();
+		std::string sendMsg = msg->SerializeAsString();
 		SendMsgAsync(sendMsg);
 		return SEND_MSG_SUCCESS;
 	}
@@ -90,7 +90,7 @@ UINT SingleConnection::SendMsgSync(Message* msg, rp::CmnBuf::MsgHead* header, sh
 		AutoLock lock(m_mutexSyncEvent);
 		m_mapSyncEvent[orderID] = new SyncMsgPairInfo(respondID, pEvent);
 	}
-	string sendMsg = msg->SerializeAsString();
+	std::string sendMsg = msg->SerializeAsString();
 	SendMsgAsync(sendMsg);
 	pEvent->Wait(SYNC_WAIT_TIME);
 	{
@@ -113,7 +113,7 @@ UINT SingleConnection::SendMsgSync(Message* msg, rp::CmnBuf::MsgHead* header, sh
 
 void SingleConnection::OnMsg(char* buf, int len)
 {
-	share_buff buff = make_shared<vector<char>>(buf, buf + len);
+	share_buff buff = std::make_shared<std::vector<char>>(buf, buf + len);
 	switch (m_cntType)
 	{
 	case CntType_Sync:
@@ -180,7 +180,7 @@ void SingleConnection::OnRecvMsgSync(share_buff buff)
 	{
 		AutoLock lock(m_mutexSyncEvent);
 		//orderid与第几个同步包有关
-		map<UINT,SyncMsgPairInfo*>::iterator it = m_mapSyncEvent.find(sHead.orderid());
+		std::map<UINT,SyncMsgPairInfo*>::iterator it = m_mapSyncEvent.find(sHead.orderid());
 		if (it != m_mapSyncEvent.end())
 		{
 			//respondid和线程有关
@@ -223,13 +223,13 @@ ConnectionPool::~ConnectionPool(void)
 	CloseAll();
 }
 
-bool ConnectionPool::Init(const string& szIP, short wPort, uint svrLinktype, uint syncConnCnt, uint asyncConnCnt, shared_ptr<ConnectionMsgHandler> msgHandler)
+bool ConnectionPool::Init(const std::string& szIP, short wPort, uint svrLinktype, uint syncConnCnt, uint asyncConnCnt, std::shared_ptr<ConnectionMsgHandler> msgHandler)
 {
 	m_szIP = szIP;
 	m_wPort = wPort;
 	for (uint i = 0; i < syncConnCnt; ++i)
 	{
-		string name = "sync-remote:" + m_szIP + ":" + to_string(wPort) + "#" + to_string(i);
+		std::string name = "sync-remote:" + m_szIP + ":" + std::to_string(wPort) + "#" + std::to_string(i);
 		SingleConnection* newSingleConnection = new SingleConnection(m_szIP, m_wPort, name, svrLinktype, ConnectionType::CntType_Sync, msgHandler);
 		if (!newSingleConnection->Connect())
 		{
@@ -243,7 +243,7 @@ bool ConnectionPool::Init(const string& szIP, short wPort, uint svrLinktype, uin
 
 	for (uint i = 0; i < asyncConnCnt; ++i)
 	{
-		string name = "async-remote:" + m_szIP + ":" + to_string(wPort) + "#" + to_string(i);
+		std::string name = "async-remote:" + m_szIP + ":" + std::to_string(wPort) + "#" + std::to_string(i);
 		SingleConnection* newSingleConnection = new SingleConnection(m_szIP, m_wPort, name, svrLinktype, ConnectionType::CntType_Async, msgHandler);
 		if (!newSingleConnection->Connect())
 		{
@@ -278,12 +278,12 @@ void ConnectionPool::CloseAll()
 
 void ConnectionPool::SendMsgAsync(char* data, int len)
 {
-	string sendMsg;
+	std::string sendMsg;
 	sendMsg = sendMsg.append(data, len);
 	m_connAsyncList[(rand() % m_connAsyncList.size())]->SendMsgAsync(sendMsg);
 }
 
-void ConnectionPool::SendMsgAsync(string& data)
+void ConnectionPool::SendMsgAsync(std::string& data)
 {
 	m_connAsyncList[(rand() % m_connAsyncList.size())]->SendMsgAsync(data);
 }

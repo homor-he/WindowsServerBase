@@ -17,7 +17,7 @@
 struct SocketArg
 {
 	TcpSocketBase new_sock;
-	string szIP;
+	std::string szIP;
 	USHORT wport;
 	//Handler handler;
 	SocketArg()
@@ -44,12 +44,12 @@ public:
 	virtual void Run();
 
 	//构造后立刻调用
-	void SetPara(const string& szIP, short wPort, int threadNum);
+	void SetPara(const std::string& szIP, short wPort, int threadNum);
 
 	bool StartServer();
 	bool CloseServer();
 	bool HandleNewConn();
-	bool PostRecv(shared_ptr<PER_IO_CONTEXT> pIOContext, PER_SOCKET_CONTEXT* pSocketContext);
+	bool PostRecv(std::shared_ptr<PER_IO_CONTEXT> pIOContext, PER_SOCKET_CONTEXT* pSocketContext);
 	void RemoveSocketContext(SOCKET sock);
 	void DeleteSocketContext(SOCKET sock);
 	
@@ -57,33 +57,33 @@ public:
 	void OnAsyncMsg(PER_SOCKET_CONTEXT* socket, share_buff buff);
 	bool DisConnected(PER_SOCKET_CONTEXT* socket);
 public:
-	shared_ptr<LinkNetObj> AddLinkNetObj(PER_SOCKET_CONTEXT* socket, UINT type);
-	const shared_ptr<LinkNetObj> GetLinkNetObj(const PER_SOCKET_CONTEXT* socket);
-	virtual shared_ptr<LinkNetObj> CreateLinkNetObjBase(PER_SOCKET_CONTEXT* socket, UINT type);
+	std::shared_ptr<LinkNetObj> AddLinkNetObj(PER_SOCKET_CONTEXT* socket, UINT type);
+	const std::shared_ptr<LinkNetObj> GetLinkNetObj(const PER_SOCKET_CONTEXT* socket);
+	virtual std::shared_ptr<LinkNetObj> CreateLinkNetObjBase(PER_SOCKET_CONTEXT* socket, UINT type);
 	bool RemoveLinkNetObj(SOCKET sock);
 private:
 	bool Init();
 protected:
 	TcpSocketBase m_listenSock;
-	shared_ptr<PER_SOCKET_CONTEXT> m_listenContext;
+	std::shared_ptr<PER_SOCKET_CONTEXT> m_listenContext;
 	int m_listenFD;
 
 	HANDLE m_IOCompletionPort;
-	string m_szIP;
+	std::string m_szIP;
 	short m_wPort;
 
-	atomic_bool m_bStarted;
+	std::atomic_bool m_bStarted;
 	int m_threadNum;
 
 	CThreadMutex m_sockListMutex;
 	//list<shared_ptr<Per_Socket_Context>> m_socketList;
-	map<SOCKET, PER_SOCKET_CONTEXT*> m_socketList;
+	std::map<SOCKET, PER_SOCKET_CONTEXT*> m_socketList;
 
-	shared_ptr<ThreadPool> m_sockHandleThreadPool;    //socket底层消息处理线程池
-	list<shared_ptr<SocketHandler>> m_socketHandlerList;
+	std::shared_ptr<ThreadPool> m_sockHandleThreadPool;    //socket底层消息处理线程池
+	std::list<std::shared_ptr<SocketHandler>> m_socketHandlerList;
 
 	CThreadMutex m_linkNetMapLock;
-	map<UINT, shared_ptr<LinkNetObj>> m_linkNetMap;
+	std::map<UINT, std::shared_ptr<LinkNetObj>> m_linkNetMap;
 
-	shared_ptr<ThreadPool> m_taskThreadPool;
+	std::shared_ptr<ThreadPool> m_taskThreadPool;
 };

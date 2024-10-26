@@ -24,7 +24,7 @@ public:
 	bool PostRecv(PER_IO_CONTEXT* pIOContext, PER_SOCKET_CONTEXT* pSocketContext);
 	bool PostSend(PER_IO_CONTEXT* pIOContext, PER_SOCKET_CONTEXT* pSocketContext);
 private:
-	atomic_bool m_quit;
+	std::atomic_bool m_quit;
 	HANDLE m_hIPCompletionPort;
 	TcpThreadServer* m_server;
 };

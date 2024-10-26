@@ -3,7 +3,7 @@
 #include "CycleLinkList.h"
 #include <functional>
 
-using namespace std;
+//using namespace std;
 
 
 // 第1个轮占的位数
@@ -30,7 +30,7 @@ enum TimerStat
 	Pauseing,
 };
 
-typedef function<void()> TimerCallback;
+typedef std::function<void()> TimerCallback;
 
 // 第1个轮 
 typedef struct TWFirst {

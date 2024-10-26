@@ -3,8 +3,8 @@
 #include <memory>
 #include <vector>
 
-typedef shared_ptr<vector<char>> share_buff;
-#define NEW_SHAREDBUFF make_shared<vector<char>>()
+typedef std::shared_ptr<std::vector<char>> share_buff;
+#define NEW_SHAREDBUFF std::make_shared<std::vector<char>>()
 
 #define LEN_HOSTADDR 256
 

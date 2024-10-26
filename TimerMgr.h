@@ -18,7 +18,7 @@ public:
 private:
 	CThreadMutex m_timerMutex;
 	//vector<TimerNode*> m_timerNodeList;   //管理所有timerNode
-	map<DWORD, TimerNode*> m_timerNodeMap;
+	std::map<DWORD, TimerNode*> m_timerNodeMap;
 	//timer任务执行线程池
 	ThreadPool m_TaskPool;
 
@@ -26,5 +26,5 @@ private:
 	uint16_t m_interval;
 	bool m_QuitExecuteThread;
 	//timerwheel tick线程
-	unique_ptr<thread> m_TimerMgrExecute;
+	std::unique_ptr<std::thread> m_TimerMgrExecute;
 };

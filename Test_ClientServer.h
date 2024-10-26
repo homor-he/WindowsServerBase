@@ -10,12 +10,12 @@ void ServerProcess()
 {
 	TcpSocketBase tcpSocket;
 	TcpSocketBase acceptSocket;
-	string acceptIP = "";
+	std::string acceptIP = "";
 	USHORT acceptPort = 0;
 	WriteLog("Server init");
 	if (tcpSocket.Socket(isOverLapped::OverLapped_False))
 	{
-		string szIp = "127.0.0.1";
+		std::string szIp = "127.0.0.1";
 		short port = 30301;
 		if (tcpSocket.Bind(szIp, port))
 		{
@@ -24,7 +24,7 @@ void ServerProcess()
 				while (true)
 				{
 					tcpSocket.Accept(&acceptSocket, &acceptIP, &acceptPort, isOverLapped::OverLapped_False, isNonBlock::IsNonBlock_True);
-					string buf;
+					std::string buf;
 					if (acceptSocket.Recv(&buf))
 					{
 						WriteLog("server recv buf cont:%s", buf.c_str());
@@ -38,7 +38,7 @@ void ServerProcess()
 void ClientProcess()
 {
 	TcpSocketBase tcpSocket;
-	string szIP = "127.0.0.1";
+	std::string szIP = "127.0.0.1";
 	short port = 30301;
 	WriteLog("Client init");
 	if (tcpSocket.Socket(isOverLapped::OverLapped_False))
@@ -56,13 +56,13 @@ void ClientProcess()
 				cmnBuf.set_allocated_msgheader(pHead);
 				cmnBuf.set_allocated_content(nullptr);
 				
-				string cont = cmnBuf.SerializeAsString();
+				std::string cont = cmnBuf.SerializeAsString();
 				tcpSocket.Send((char*)cont.c_str(), cont.size());
 				Sleep(1000);
 			}
 #endif // PROTOBUF
 
-			string cont;
+			std::string cont;
 #ifdef PROTOBUF
 			rp::ContentTest sContext;
 			sContext.set_testdouble(1.0);
@@ -74,12 +74,12 @@ void ClientProcess()
 			for (int i = 0; i < 2; ++i)
 			{
 				pUser = sContext.add_testuserlist();
-				string szAccount = "TestUser" + to_string(i);
+				std::string szAccount = "TestUser" + std::to_string(i);
 				pUser->set_testaccount(szAccount);
-				pUser->set_testpwd(to_string(i<<i));
+				pUser->set_testpwd(std::to_string(i<<i));
 				pUser->set_testtype(rp::ContentTest::TestType::ContentTest_TestType_PC);
 			}
-			string contentStr = sContext.SerializeAsString();
+			std::string contentStr = sContext.SerializeAsString();
 			//测试协议
 			rp::CmnBuf_MsgHead* pHead = new rp::CmnBuf_MsgHead;
 			pHead->set_msgtype(PROTO_TEST_REQ);
@@ -108,7 +108,7 @@ void ClientProcess()
 				if (tcpSocket.Send((char*)cont.c_str(), cmnBuf.ByteSizeLong()))
 				{
 					//WriteLog("client send buf cont:%s", cont.c_str());
-					string buf;
+					std::string buf;
 
 					while (true)
 					{
@@ -143,8 +143,8 @@ void ClientProcess()
 							for (int i = 0; i < size; ++i)
 							{
 								rp::ContentTest::TestUser user = userList.Get(i);
-								string account = user.testaccount();
-								string pwd = user.testpwd();
+								std::string account = user.testaccount();
+								std::string pwd = user.testpwd();
 								rp::ContentTest::TestType testType = user.testtype();
 							}
 							break;
@@ -192,7 +192,7 @@ void ClientIocpProcess()
 
 	while (true)
 	{
-		string cont;
+		std::string cont;
 #ifdef PROTOBUF
 		rp::ContentTest sContext;
 		sContext.set_testdouble(1.0);
@@ -204,12 +204,12 @@ void ClientIocpProcess()
 		for (int i = 0; i < 2; ++i)
 		{
 			pUser = sContext.add_testuserlist();
-			string szAccount = "TestUser" + to_string(i);
+			std::string szAccount = "TestUser" + std::to_string(i);
 			pUser->set_testaccount(szAccount);
-			pUser->set_testpwd(to_string(i << i));
+			pUser->set_testpwd(std::to_string(i << i));
 			pUser->set_testtype(rp::ContentTest::TestType::ContentTest_TestType_PC);
 		}
-		string contentStr = sContext.SerializeAsString();
+		std::string contentStr = sContext.SerializeAsString();
 		//测试协议
 		rp::CmnBuf_MsgHead* pHead = new rp::CmnBuf_MsgHead;
 		pHead->set_msgtype(PROTO_TEST_REQ);

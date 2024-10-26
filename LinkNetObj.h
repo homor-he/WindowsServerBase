@@ -17,7 +17,7 @@ public:
 
 	virtual bool OnMsg(PER_SOCKET_CONTEXT* conn, share_buff buff);
 	virtual bool OnDisconnected(PER_SOCKET_CONTEXT* conn);
-	virtual bool SendMsgAsync(string &sendMsg);
+	virtual bool SendMsgAsync(std::string &sendMsg);
 
 	void SendBuildConnectAck();
 	UINT GetUniqueID(void);
