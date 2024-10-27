@@ -237,6 +237,7 @@ bool ConnectionPool::Init(const std::string& szIP, short wPort, uint svrLinktype
 			delete newSingleConnection;
 			newSingleConnection = nullptr;
 			m_connectedAll = false;
+			continue;
 		}
 		m_connSyncList.push_back(newSingleConnection);
 	}
@@ -251,6 +252,7 @@ bool ConnectionPool::Init(const std::string& szIP, short wPort, uint svrLinktype
 			delete newSingleConnection;
 			newSingleConnection = nullptr;
 			m_connectedAll = false;
+			continue;
 		}
 		m_connAsyncList.push_back(newSingleConnection);
 	}
@@ -278,6 +280,9 @@ void ConnectionPool::CloseAll()
 
 void ConnectionPool::SendMsgAsync(char* data, int len)
 {
+	if (m_connAsyncList.size() <= 0)
+		return;
+
 	std::string sendMsg;
 	sendMsg = sendMsg.append(data, len);
 	m_connAsyncList[(rand() % m_connAsyncList.size())]->SendMsgAsync(sendMsg);
@@ -285,17 +290,26 @@ void ConnectionPool::SendMsgAsync(char* data, int len)
 
 void ConnectionPool::SendMsgAsync(std::string& data)
 {
+	if (m_connAsyncList.size() <= 0)
+		return;
+
 	m_connAsyncList[(rand() % m_connAsyncList.size())]->SendMsgAsync(data);
 }
 
 #ifdef PROTOBUF
 uint ConnectionPool::SendMsgAsync(Message* data)
 {
+	if (m_connAsyncList.size() <= 0)
+		return SEND_MSG_FAIL;
+
 	return m_connAsyncList[(rand() % m_connAsyncList.size())]->SendMsg(data, nullptr);
 }
 
 uint ConnectionPool::SendMsgSync(Message* data, rp::CmnBuf::MsgHead* header, share_buff recv)
 {
+	if (m_connSyncList.size() <= 0)
+		return SEND_MSG_FAIL;
+
 	return m_connSyncList[(rand() % m_connSyncList.size())]->SendMsg(data, header, recv);
 }
 #endif // PROTOBUF

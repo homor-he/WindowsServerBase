@@ -104,7 +104,8 @@ public:
 			m_Socket = INVALID_SOCKET;
 		}
 
-		RemoveAllIOContext();
+		//锁已经释放，不需要用锁
+		//std::list<std::shared_ptr<PER_IO_CONTEXT>>().swap(m_IOContextList);
 	}
 
 	std::shared_ptr<PER_IO_CONTEXT> GetNewIOContext()
